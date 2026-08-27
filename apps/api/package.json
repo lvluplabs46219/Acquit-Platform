@@ -35,6 +35,6 @@
     "esbuild": "^0.25.0",
     "esbuild-plugin-pino": "^2.3.0",
     "pino-pretty": "^11.2.1",
-    "thread-stream": "^3.0.0"
+    "thread-stream": "^4.2.0"
   }
 }
