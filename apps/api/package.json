@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@google/genai": "^2.17.1",
-    "@supabase/supabase-js": "^2.43.5",
+    "@supabase/supabase-js": "^2.116.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "@workspace/db": "0.0.0",
