@@ -30,7 +30,7 @@
     "@google/genai": "^2.18.0",
     "@replit/connectors-sdk": "^0.4.2",
     "@sentry/node": "^10.70.0",
-    "@sentry/profiling-node": "^10.70.0",
+    "@sentry/profiling-node": "^10.75.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.116.0",
     "@upstash/ratelimit": "^2.0.8",
