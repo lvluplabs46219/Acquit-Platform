@@ -60,7 +60,6 @@ import {
   type ChainTrackingInfo,
   type ChainTrackingEvent,
   type ChainVerificationResult,
-  type ChainResourceType,
   ChainOfCommand
 } from '@/lib/chain-of-command';
 
@@ -339,9 +338,7 @@ function TimelineEvent({
                             variant="ghost"
                             size="icon"
                             className="h-5 w-5 text-white/40 hover:text-[#D4AF37] hover:bg-white/5"
-                            onClick={() => {
-                              if (event.previousHash) void navigator.clipboard.writeText(event.previousHash);
-                            }}
+                            onClick={() => navigator.clipboard.writeText(event.previousHash ?? '')}
                           >
                             <Copy size={10} />
                           </Button>
@@ -582,7 +579,7 @@ export function ChainTracker({
     // Create mock tracking info
     const mockTrackingInfo: ChainTrackingInfo = {
       resourceId: resourceId || 'doc-001',
-      resourceType: (resourceType as ChainResourceType) || 'document',
+      resourceType: resourceType || 'document',
       resourceName: 'Exhibit_A_Dashcam_Log.pdf',
       caseId: caseId || 'case-001',
       chainId: chainId || 'demo-chain-001',
@@ -971,9 +968,6 @@ export function VerifyChainButton({ chainId, onVerify, className = '' }: VerifyC
 // ============================================================================
 
 export {
-  ChainTracker,
-  ChainTrackerList,
-  VerifyChainButton,
   StatusBadge,
   getStatusConfig,
   formatDate,
