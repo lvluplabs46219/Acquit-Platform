@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import {
   STITCH_CATEGORIES,
   ALL_STITCH_MOCKUPS,
@@ -40,7 +42,7 @@ export function StitchGallery() {
               ACQUIT.AI / STITCH OS SPECIFICATION
             </span>
             <span className="rounded bg-[#36485b]/60 px-2 py-0.5 font-mono text-[10px] text-[#b5c8df]">
-              46 DESIGN SCREENS
+              {ALL_STITCH_MOCKUPS.length} DESIGN SCREENS
             </span>
           </div>
           <h1 className="font-serif text-3xl font-bold text-white tracking-tight">

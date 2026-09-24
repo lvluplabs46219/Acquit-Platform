@@ -2,17 +2,25 @@ import React, { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight, MapPin, Award, ExternalLink } from "lucide-react";
-import type { LawyerListing } from "./AttorneyDirectory";
+
+export interface LawyerListing {
+  id: string;
+  name: string;
+  firmName: string;
+  listingTier: "premium" | "featured" | "standard";
+  practiceAreas: string[];
+  counties: string[];
+  states: string[];
+  profileUrl?: string;
+}
 
 interface Props {
   lawyers: LawyerListing[];
 }
 
 export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
-  const featured = lawyers.filter(l => l.listingTier === "premium" || l.listingTier === "featured");
-  
-  if (featured.length === 0) return null;
-  
+  const featured = lawyers.filter((l) => l.listingTier === "premium" || l.listingTier === "featured");
+
   const canLoop = featured.length >= 3;
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: canLoop, align: "start" },
@@ -21,6 +29,8 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  if (featured.length === 0) return null;
 
   return (
     <div className="mb-8" role="region" aria-roledescription="carousel" aria-label="Featured Attorneys">
@@ -35,7 +45,7 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
           </button>
         </div>
       </div>
-      
+
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex space-x-4 pb-4">
           {featured.map((lawyer, index) => (
@@ -52,12 +62,12 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
                     </div>
                   )}
                 </div>
-                
+
                 <h4 className="font-['Fraunces'] text-lg font-semibold text-white group-hover:text-[#D4AF37] transition-colors">{lawyer.name}</h4>
                 <p className="text-xs text-white/60 mb-3">{lawyer.firmName}</p>
-                
+
                 <div className="flex flex-wrap gap-1.5 mb-4 mt-auto">
-                  {lawyer.practiceAreas.slice(0, 2).map((area) => (
+                  {lawyer.practiceAreas.slice(0, 2).map((area: string) => (
                     <span key={area} className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[10px] text-white/70">
                       {area}
                     </span>
@@ -68,10 +78,20 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
                     </span>
                   )}
                 </div>
-                
+
                 <div className="flex items-center gap-1.5 text-[10px] text-white/50 mt-2">
                   <MapPin size={12} />
                   <span>{lawyer.counties[0]} • {lawyer.states[0]}</span>
+                  {lawyer.profileUrl && (
+                    <a
+                      href={lawyer.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-auto flex items-center gap-1 text-[#D4AF37] hover:text-white"
+                    >
+                      <ExternalLink size={12} /> Profile
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
