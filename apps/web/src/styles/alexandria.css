@@ -1,7 +1,8 @@
 /* ==========================================================================
-   Alexandria -- uniform theme applied across all converted Stitch pages.
-   High-end editorial: Noto Serif headlines, Inter body, Public Sans labels.
-   No-line rule: hierarchy via surface tiers, never 1px borders.
+   Alexandria -- shared application shell.
+   v2: styles ONLY the shell (nav, page tag). Page content is left to each
+   design's own Tailwind tokens + extracted styles so converted pages render
+   faithfully. Uniformity comes from the shared shell, not forced overrides.
    ========================================================================== */
 
 :root {
@@ -9,17 +10,9 @@
   --al-primary-ink: #ffffff;
   --al-gold: #6d5e00;
   --al-surface: #fbfaf7;
-  --al-surface-2: #f2efe9;
-  --al-surface-dim: #e7e3da;
   --al-ink: #1f1d18;
   --al-ink-soft: #57534a;
   --al-radius: 8px;
-}
-
-body {
-  background: var(--al-surface) !important;
-  color: var(--al-ink) !important;
-  font-family: "Inter", system-ui, sans-serif !important;
 }
 
 /* ---- Shared shell ---- */
@@ -64,6 +57,7 @@ body {
   display: flex;
   flex-direction: column;
   line-height: 1.1;
+  color: var(--al-ink);
 }
 .al-brand-text em {
   font-family: "Public Sans", sans-serif;
@@ -113,68 +107,8 @@ body {
   flex-shrink: 0;
 }
 .al-main {
-  padding-top: 3.75rem;
+  padding-top: 3.5rem;
   min-height: 100vh;
-}
-
-/* ---- Uniform typography over converted pages ---- */
-.stitch-page h1,
-.stitch-page h2,
-.stitch-page h3,
-.stitch-page h4,
-.stitch-page h5,
-.stitch-page h6 {
-  font-family: "Noto Serif", serif !important;
-  color: var(--al-ink) !important;
-  letter-spacing: -0.01em;
-}
-.stitch-page p,
-.stitch-page li,
-.stitch-page span,
-.stitch-page td,
-.stitch-page th,
-.stitch-page label {
-  font-family: "Inter", system-ui, sans-serif !important;
-}
-.stitch-page small,
-.stitch-page caption,
-.stitch-page figcaption {
-  font-family: "Public Sans", sans-serif !important;
-  color: var(--al-ink-soft) !important;
-}
-
-/* ---- Alexandria component rules ---- */
-.stitch-page a {
-  color: var(--al-primary) !important;
-  text-decoration: none;
-}
-.stitch-page a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.stitch-page button,
-.stitch-page [role="button"],
-.stitch-page .btn,
-.stitch-page .button {
-  border-radius: var(--al-radius) !important;
-  font-family: "Public Sans", sans-serif !important;
-}
-.stitch-page input,
-.stitch-page textarea,
-.stitch-page select {
-  background: #ffffff !important;
-  border-radius: var(--al-radius) !important;
-  outline: 1px solid rgba(31, 29, 24, 0.15);
-  outline-offset: -1px;
-}
-.stitch-page input:focus,
-.stitch-page textarea:focus,
-.stitch-page select:focus {
-  outline: 2px solid var(--al-primary);
-}
-.stitch-page img,
-.stitch-page svg {
-  border-radius: var(--al-radius);
 }
 
 @media (prefers-reduced-motion: reduce) {
