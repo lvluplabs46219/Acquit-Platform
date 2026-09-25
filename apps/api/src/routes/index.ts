@@ -10,6 +10,8 @@ import { geminiRouter } from "./gemini";
 import { filingRouter } from "./filing";
 import auditRouter from "./audit";
 import chainOfCommandRouter from "./chain-of-command";
+import osRouter from "./os";
+import agentsExecuteRouter from "./agents-execute";
 import { verifySession } from "../middleware/verifySession";
 
 const router: IRouter = Router();
@@ -25,7 +27,9 @@ router.use(documentsRouter);
 router.use(mattersRouter);
 router.use(geminiRouter);
 router.use(filingRouter);
-router.use('/audit', auditRouter as any);
-router.use('/chain-of-command', chainOfCommandRouter as any);
+router.use("/audit", auditRouter as any);
+router.use("/chain-of-command", chainOfCommandRouter as any);
+router.use("/os", osRouter as any);
+router.use("/v1/agents", agentsExecuteRouter as any);
 
 export default router;
