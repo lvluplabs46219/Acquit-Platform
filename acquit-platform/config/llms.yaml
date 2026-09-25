@@ -1,7 +1,19 @@
 providers:
+  local_ollama:
+    name: local_ollama
+    model: llama3.2
+    base_url: http://127.0.0.1:11434
+    timeout: 120
+    max_retries: 2
+    capabilities:
+      - text_generation
+      - private_processing
+      - case_data_processing
+    cost_per_token: 0.0
+    avg_latency: 0.4
   openai:
     name: openai
-    model: gpt-4
+    model: gpt-4o-mini
     base_url: https://api.openai.com/v1
     timeout: 60
     max_retries: 3
@@ -9,7 +21,6 @@ providers:
       - text_generation
       - code_generation
       - json_mode
-      - function_calling
     cost_per_token: 0.00001
     avg_latency: 1.0
   anthropic:
@@ -22,7 +33,6 @@ providers:
       - text_generation
       - long_context
       - reasoning
-      - tool_use
     cost_per_token: 0.000015
     avg_latency: 1.5
   mistral:
@@ -34,24 +44,12 @@ providers:
     capabilities:
       - text_generation
       - multilingual
-      - code_generation
     cost_per_token: 0.000008
     avg_latency: 0.8
-  local_ollama:
-    name: local_ollama
-    model: llama3:8b
-    base_url: http://localhost:11434
-    timeout: 120
-    max_retries: 2
-    capabilities:
-      - text_generation
-      - private_processing
-      - case_data_processing
-    cost_per_token: 0.0
-    avg_latency: 0.4
 
+# Default chain: local Ollama only required; cloud optional
 fallback_chain:
   - local_ollama
-  - anthropic
   - openai
+  - anthropic
   - mistral
