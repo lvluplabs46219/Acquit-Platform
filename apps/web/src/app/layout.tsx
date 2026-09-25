@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../index.css";
+import "../styles/alexandria.css";
 
 export const metadata: Metadata = {
   title: "Acquit.ai — Legal OS & Pro Se Workspace",
@@ -19,11 +20,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&family=Public+Sans:wght@400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#111214] text-[#e1e2e5] antialiased min-h-screen">
+      <body className="antialiased min-h-screen">
         {children}
       </body>
     </html>
