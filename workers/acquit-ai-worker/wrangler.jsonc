@@ -1,0 +1,9 @@
+{
+  "name": "acquit-ai-worker",
+  "main": "worker.js",
+  "compatibility_date": "2024-09-23",
+  "workers_dev": true,
+  "vars": {
+    "API_UPSTREAM_URL": "https://aquit-platform-api-lvlup-labs.vercel.app"
+  }
+}
