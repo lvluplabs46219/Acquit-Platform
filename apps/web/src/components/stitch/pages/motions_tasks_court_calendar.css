@@ -1,0 +1,16 @@
+/* AUTO-GENERATED page styles (motions_tasks_court_calendar) */
+
+        /* Custom scrollbar for War Room aesthetic */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #141313; }
+        ::-webkit-scrollbar-thumb { background: #44474a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5d5e61; }
+        
+        /* Material Icon styling */
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* Brutalist borders */
+        .border-brutalist { border: 1px solid #2C3E50; }
+        .shadow-brutalist { box-shadow: 2px 2px 0px 0px #c6c6c9; }
+    

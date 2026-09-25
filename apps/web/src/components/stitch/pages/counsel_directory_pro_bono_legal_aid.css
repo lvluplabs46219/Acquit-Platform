@@ -1,0 +1,21 @@
+/* AUTO-GENERATED page styles (counsel_directory_pro_bono_legal_aid) */
+
+        body {
+            background-color: #141313;
+            color: #e5e2e1;
+        }
+        /* Custom scrollbar for War Room aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #141313; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #353435; 
+            border: 1px solid #141313;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #44474a; 
+        }
+    

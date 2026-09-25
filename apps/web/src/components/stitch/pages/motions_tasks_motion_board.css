@@ -1,0 +1,19 @@
+/* AUTO-GENERATED page styles (motions_tasks_motion_board) */
+
+        /* Custom Scrollbar for Kanban Board */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #141313;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #44474a;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #5d5e61;
+        }
+    

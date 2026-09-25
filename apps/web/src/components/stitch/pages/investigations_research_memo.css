@@ -1,0 +1,44 @@
+/* AUTO-GENERATED page styles (investigations_research_memo) */
+
+        body {
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+            font-family: theme('fontFamily.body-md');
+        }
+        
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom Scrollbar for brutalist feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-low');
+            border-left: 1px solid theme('colors.outline-variant');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border: 1px solid theme('colors.surface-container-low');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+    
+
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    

@@ -1,0 +1,9 @@
+/* AUTO-GENERATED page styles (court_watch_hearing_prep_kit) */
+
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        /* Scrollbar styling for density */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: theme('colors.outline-variant'); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: theme('colors.outline'); }
+    

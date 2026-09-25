@@ -1,0 +1,26 @@
+/* AUTO-GENERATED page styles (the_docket_open_a_matter) */
+
+        /* Custom scrollbar for density */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #141313; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44474a; 
+            border-radius: 0;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f9194; 
+        }
+        
+        /* Brutalist Input Focus Utility */
+        .brutalist-input:focus {
+            border-bottom-width: 1px;
+            border: 1px solid #c6c6c9; /* primary */
+            box-shadow: 2px 2px 0px 0px #c6c6c9;
+            outline: none;
+        }
+    

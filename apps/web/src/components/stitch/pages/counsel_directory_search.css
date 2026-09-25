@@ -1,0 +1,34 @@
+/* AUTO-GENERATED page styles (counsel_directory_search) */
+
+        body {
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+            font-family: theme('fontFamily.body-md');
+        }
+        /* Custom scrollbar for data dense areas */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-lowest'); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant'); 
+            border-radius: theme('borderRadius.DEFAULT');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline'); 
+        }
+        
+        .legal-gold {
+            color: #D4AF37;
+        }
+        .bg-legal-gold {
+            background-color: #D4AF37;
+            color: #141313;
+        }
+        .border-legal-gold {
+            border-color: #D4AF37;
+        }
+    

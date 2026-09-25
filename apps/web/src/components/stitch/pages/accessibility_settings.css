@@ -1,0 +1,11 @@
+/* AUTO-GENERATED page styles (accessibility_settings) */
+
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Custom Toggle Switch Styles */
+        .toggle-checkbox:checked { right: 0; border-color: #c6c6c9; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #c6c6c9; }
+        .toggle-checkbox:checked + .toggle-label:after { transform: translateX(100%); border-color: white; }
+    

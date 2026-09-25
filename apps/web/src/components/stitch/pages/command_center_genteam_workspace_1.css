@@ -1,0 +1,30 @@
+/* AUTO-GENERATED page styles (command_center_genteam_workspace_1) */
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Scrollbar styling for density */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44474a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f9194;
+        }
+        
+        /* Custom scrollbar for chat area to blend in */
+        .chat-scroll::-webkit-scrollbar-track {
+            background: #141313;
+        }
+    

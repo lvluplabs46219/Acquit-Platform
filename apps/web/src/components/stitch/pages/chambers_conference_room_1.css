@@ -1,0 +1,33 @@
+/* AUTO-GENERATED page styles (chambers_conference_room_1) */
+
+        /* Custom Scrollbar for Terminal aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0e0e; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44474a; 
+            border-radius: 0;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f9194; 
+        }
+        .blinking-cursor {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .agent-processing {
+            animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(181, 200, 223, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(181, 200, 223, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(181, 200, 223, 0); }
+        }
+    

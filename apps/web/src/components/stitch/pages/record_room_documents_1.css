@@ -1,0 +1,49 @@
+/* AUTO-GENERATED page styles (record_room_documents_1) */
+
+        /* Base styles adhering to 'Digital Ledger' Brutalist principles */
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: theme('fontFamily.body-md');
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Thin, crisp borders for institutional feel */
+        .brutalist-border {
+            border: 1px solid theme('colors.outline-variant');
+        }
+        .brutalist-border-b { border-bottom: 1px solid theme('colors.outline-variant'); }
+        .brutalist-border-t { border-top: 1px solid theme('colors.outline-variant'); }
+        .brutalist-border-l { border-left: 1px solid theme('colors.outline-variant'); }
+        .brutalist-border-r { border-right: 1px solid theme('colors.outline-variant'); }
+        
+        /* Legal Gold accent (using secondary for this context as a proxy for the 'Gold' highlight mentioned in brand, adjusting to theme colors available) */
+        .active-indicator {
+            border-left: 4px solid theme('colors.secondary');
+        }
+        
+        /* Table Row Styling */
+        .docket-row {
+            transition: background-color 0.15s ease;
+        }
+        .docket-row:hover {
+            background-color: theme('colors.surface-container-high');
+        }
+        .docket-row.selected {
+            background-color: theme('colors.surface-container-high');
+            border-left: 2px solid theme('colors.secondary');
+        }
+        
+        /* Scrollbar styling for density */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: 0;
+        }
+    

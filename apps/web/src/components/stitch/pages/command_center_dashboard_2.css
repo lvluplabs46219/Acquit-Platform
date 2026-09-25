@@ -1,0 +1,7 @@
+/* AUTO-GENERATED page styles (command_center_dashboard_2) */
+
+        body { background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .hard-shadow-active { box-shadow: 2px 2px 0px 0px #b5c8df; } /* Using secondary as 'Legal Gold' proxy for this theme */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    

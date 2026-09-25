@@ -1,0 +1,22 @@
+/* AUTO-GENERATED page styles (chambers_ai_legal_team_2) */
+
+        .hard-shadow-active {
+            box-shadow: 2px 2px 0px 0px #cfc5be;
+        }
+        .inset-glow {
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #141313; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44474a; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f9194; 
+        }
+    

@@ -1,0 +1,17 @@
+/* AUTO-GENERATED page styles (investigations_active_research_2) */
+
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-surface');
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-lowest');
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: 4px;
+        }
+    

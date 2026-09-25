@@ -1,0 +1,11 @@
+/* AUTO-GENERATED page styles (record_room_draft_desk) */
+
+        /* Hide scrollbar for cleaner UI but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    

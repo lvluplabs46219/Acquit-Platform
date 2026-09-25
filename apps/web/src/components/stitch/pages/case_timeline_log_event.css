@@ -1,0 +1,9 @@
+/* AUTO-GENERATED page styles (case_timeline_log_event) */
+
+        body { background-color: #141313; color: #e5e2e1; }
+        .border-legal { border: 1px solid #2C3E50; }
+        .shadow-active { box-shadow: 2px 2px 0px 0px #b5c8df; } /* Using secondary as legal gold substitute in theme */
+        .glass-panel { background: rgba(28, 27, 27, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(68, 71, 74, 0.5); }
+        .input-blank { border: none; border-bottom: 1px solid #44474a; background: transparent; border-radius: 0; padding-left: 0; padding-right: 0; }
+        .input-blank:focus { border-bottom: 1px solid #b5c8df; box-shadow: none; outline: none; border: 1px solid #b5c8df; padding: 0.5rem; background: #201f1f;}
+    

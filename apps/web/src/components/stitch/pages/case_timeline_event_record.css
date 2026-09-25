@@ -1,0 +1,18 @@
+/* AUTO-GENERATED page styles (case_timeline_event_record) */
+
+        /* Custom scrollbar for data dense areas */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #141313;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #353435;
+            border-radius: 0px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #44474a;
+        }
+    

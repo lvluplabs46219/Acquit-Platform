@@ -1,0 +1,14 @@
+/* AUTO-GENERATED page styles (counsel_directory_search_portal_2) */
+
+        /* Custom scrollbar for high-fidelity look */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; border-left: 1px solid #44474a; }
+        ::-webkit-scrollbar-thumb { background: #353435; }
+        ::-webkit-scrollbar-thumb:hover { background: #44474a; }
+        
+        .brutalist-input:focus {
+            box-shadow: 2px 2px 0px 0px #b5c8df;
+            border-color: #b5c8df;
+            outline: none;
+        }
+    

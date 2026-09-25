@@ -1,0 +1,18 @@
+/* AUTO-GENERATED page styles (chambers_plea_analysis) */
+
+        /* Custom scrollbar for dense panels */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44474a;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8f9194;
+        }
+    
