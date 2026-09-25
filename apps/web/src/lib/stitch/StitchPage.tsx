@@ -1,110 +1,65 @@
 import fs from "fs/promises";
 import path from "path";
 
-const NAV_ROUTE_TEXT: Record<string, string> = {
-  "command center": "/",
-  "the docket": "/docket",
-  docket: "/docket",
-  chambers: "/chambers",
-  "ai legal team": "/chambers",
-  "law library": "/law-library",
-  "record room": "/record-room",
-  documents: "/record-room",
-  "court watch": "/court-watch",
-  timeline: "/timeline",
-  "case timeline": "/timeline",
-  investigations: "/investigations",
-  evidence: "/investigations",
-  "evidence locker": "/investigations",
-  "counsel directory": "/counsel",
-  counsel: "/counsel",
-  "filing center": "/filing",
-  "court submission": "/filing",
-  security: "/security",
-  "system audit": "/audit",
-  settings: "/audit",
-  calendar: "/calendar",
-  "court calendar": "/calendar",
-  motions: "/motions",
-  "motions & tasks": "/motions",
-};
-
-const navigationScript = `
-  <script>
-    (function() {
-      document.addEventListener('click', function(e) {
-        var target = e.target.closest('a, button');
-        if (!target) return;
-        var text = (target.innerText || '').trim().toLowerCase();
-        var routeMap = ${JSON.stringify(NAV_ROUTE_TEXT)};
-        for (var key in routeMap) {
-          if (text.indexOf(key) !== -1) {
-            e.preventDefault();
-            window.location.href = routeMap[key];
-            return;
-          }
-        }
-      }, true);
-    })();
-  </script>
-`;
-
-export async function loadStitchHtml(folder: string): Promise<string> {
+/**
+ * Fallback renderer for designs not yet in the React registry.
+ * Uses a full-viewport iframe so Tailwind Play CDN + full HTML work.
+ * Prefer getStitchComponent() after `npm run stitch:convert`.
+ */
+export async function stitchAssetExists(folder: string): Promise<boolean> {
   const filePath = path.join(
     process.cwd(),
     "public",
-    "assets",
-    "stitch",
+    "mockups",
     folder,
-    "code.html"
+    "index.html"
   );
   try {
-    return await fs.readFile(filePath, "utf-8");
-  } catch (error) {
-    console.error(`[stitch] Error reading design ${folder}:`, error);
-    return "";
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
   }
 }
 
-function injectNavigationScript(html: string): string {
-  if (html.includes("</body>")) {
-    return html.replace("</body>", `${navigationScript}</body>`);
-  }
-  return html + navigationScript;
-}
-
-/**
- * Renders a Stitch design as the actual, full-bleed application page.
- * Edge-to-edge: no gallery chrome, no viewer shell.
- */
 export default async function StitchPage({
   folder,
 }: {
   folder: string;
 }) {
-  const rawHtml = await loadStitchHtml(folder);
+  const exists = await stitchAssetExists(folder);
 
-  if (!rawHtml) {
+  if (!exists) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0A0A0A]">
-        <div className="text-center">
-          <h1 className="mb-4 text-2xl font-semibold text-white">
+      <main className="flex min-h-screen items-center justify-center bg-[#0A0A0A] px-6">
+        <div className="max-w-lg text-center">
+          <h1 className="mb-3 text-2xl font-semibold text-white">
             Design unavailable: {folder}
           </h1>
-          <p className="text-white/60">
-            Run <code>npm run mockups:copy</code> from <code>apps/web</code> and retry.
+          <p className="mb-4 text-sm text-white/60 leading-relaxed">
+            Run conversion or copy mockups, then hard-refresh.
           </p>
+          <pre className="rounded-lg bg-white/5 p-4 text-left text-xs text-emerald-300 overflow-x-auto">
+{`cd apps/web
+npm run stitch:convert   # React components
+npm run mockups:copy     # iframe fallback assets
+npm run dev`}
+          </pre>
         </div>
       </main>
     );
   }
 
-  const processedHtml = injectNavigationScript(rawHtml);
+  const src = `/mockups/${encodeURIComponent(folder)}/index.html`;
 
   return (
-    <div
-      className="w-screen min-h-screen"
-      dangerouslySetInnerHTML={{ __html: processedHtml }}
-    />
+    <div className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#0A0A0A]">
+      <iframe
+        title={folder}
+        src={src}
+        className="absolute inset-0 h-full w-full border-0"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+      />
+    </div>
   );
 }
