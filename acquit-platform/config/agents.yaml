@@ -14,7 +14,8 @@ agents:
       - LEGAL_RESEARCH
       - DELEGATE_LLM
     max_sensitivity: case_data
-    preferred_model: anthropic
+    preferred_model: ollama
+    model_name: llama3.2
     config:
       max_sources: 10
       search_depth: comprehensive
@@ -33,7 +34,8 @@ agents:
       - READ_DOCUMENTS
       - DELEGATE_LLM
     max_sensitivity: internal
-    preferred_model: openai
+    preferred_model: ollama
+    model_name: qwen2.5-coder:7b
     config:
       languages:
         - python
