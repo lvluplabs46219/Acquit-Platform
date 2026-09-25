@@ -10,7 +10,7 @@ import {
 import { usersTable, mattersTable } from "./index";
 
 // Agent Runtime — one row per delegated agent execution
-export const agentRunsTable = pgTable("agent_runs", {
+export const agentTaskRunsTable = pgTable("agent_task_runs", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
   matterId: uuid("matter_id").references(() => mattersTable.id, { onDelete: "set null" }),
@@ -48,7 +48,8 @@ export const clerkAlertsTable = pgTable("clerk_alerts", {
 // Active Research screen + CourtListener pulls
 export const researchQueriesTable = pgTable("research_queries", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  userId: uuid("user_id").notNull().referen
+ces(() => usersTable.id, { onDelete: "cascade" }),
   matterId: uuid("matter_id").references(() => mattersTable.id, { onDelete: "set null" }),
   query: text("query").notNull(),
   depth: text("depth").default("comprehensive"),
@@ -60,6 +61,6 @@ export const researchQueriesTable = pgTable("research_queries", {
   completedAt: timestamp("completed_at", { withTimezone: true }),
 });
 
-export type AgentRun = typeof agentRunsTable.$inferSelect;
+export type AgentRun = typeof agentTaskRunsTable.$inferSelect;
 export type ClerkAlert = typeof clerkAlertsTable.$inferSelect;
 export type ResearchQuery = typeof researchQueriesTable.$inferSelect;

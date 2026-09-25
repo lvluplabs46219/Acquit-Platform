@@ -6,7 +6,7 @@
 -- ---------------------------------------------------------------------
 -- 1. agent_runs: one row per delegated agent execution
 -- ---------------------------------------------------------------------
-create table if not exists public.agent_runs (
+create table if not exists public.agent_task_runs (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.users(id) on delete cascade,
   matter_id uuid references public.matters(id) on delete set null,
@@ -25,27 +25,28 @@ create table if not exists public.agent_runs (
   updated_at timestamptz not null default now()
 );
 
-create index if not exists idx_agent_runs_user on public.agent_runs(user_id, created_at desc);
-create index if not exists idx_agent_runs_matter on public.agent_runs(matter_id);
+create index if not exists idx_agent_runs_user on public.agent_task_runs(user_id, created_at desc);
+create index if not exists idx_agent_runs_matter on public.agent_task_runs(matter_id);
 
-alter table public.agent_runs enable row level security;
+alter table public.agent_task_runs enable row level security;
 
-drop policy if exists "agent_runs_select_own" on public.agent_runs;
-create policy "agent_runs_select_own" on public.agent_runs
+drop policy if exists "agent_runs_select_own" on public.agent_task_runs;
+create policy "agent_runs_select_own" on public.agent_task_runs
   for select using (
     user_id in (select id from public.users where auth_id = auth.uid())
   );
 
-drop policy if exists "agent_runs_insert_own" on public.agent_runs;
-create policy "agent_runs_insert_own" on public.agent_runs
+drop policy if exists "agent_runs_insert_own" on public.agent_task_runs;
+create policy "agent_runs_insert_own" on public.agent_task_runs
   for insert with check (
     user_id in (select id from public.users where auth_id = auth.uid())
   );
 
-drop policy if exists "agent_runs_update_own" on public.agent_runs;
-create policy "agent_runs_update_own" on public.agent_runs
+drop policy if exists "agent_runs_update_own" on public.agent_task_runs;
+create policy "agent_runs_update_own" on public.agent_task_runs
   for update using (
     user_id in (select id from public.users where auth_id = auth.uid())
+
   );
 
 -- ---------------------------------------------------------------------
@@ -91,7 +92,8 @@ create policy "clerk_alerts_update_own" on public.clerk_alerts
 
 drop policy if exists "clerk_alerts_delete_own" on public.clerk_alerts;
 create policy "clerk_alerts_delete_own" on public.clerk_alerts
-  for delete using (
+  for de
+lete using (
     user_id in (select id from public.users where auth_id = auth.uid())
   );
 

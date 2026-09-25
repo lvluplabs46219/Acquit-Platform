@@ -1,7 +1,7 @@
 import { Router, type Response } from "express";
 import { desc, eq } from "drizzle-orm";
 import { db } from "@workspace/db";
-import { agentRunsTable } from "@workspace/db/agent-runtime";
+import { agentTaskRunsTable } from "@workspace/db/agent-runtime";
 import { AuthenticatedRequest, verifySession } from "../middleware/verifySession";
 
 export const agentRunsRouter = Router();
@@ -32,8 +32,8 @@ async function callAgentLayer(payload: Record<string, unknown>): Promise<Record<
   }
 }
 
-// GET /agent-runs — latest runs for the user (optionally filtered by matter)
-agentRunsRouter.get("/agent-runs", async (req: AuthenticatedRequest, res: Response) => {
+// GET /agent-task-runs — latest runs for the user (optionally filtered by matter)
+agentRunsRouter.get("/agent-task-runs", async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = req.user;
     if (!user?.id) return res.status(401).json({ success: false, error: "Unauthorized" });
@@ -41,9 +41,9 @@ agentRunsRouter.get("/agent-runs", async (req: AuthenticatedRequest, res: Respon
     const matterId = (req.query.matterId as string) || null;
     const rows = await db
       .select()
-      .from(agentRunsTable)
-      .where(eq(agentRunsTable.userId, user.id))
-      .orderBy(desc(agentRunsTable.createdAt))
+      .from(agentTaskRunsTable)
+      .where(eq(agentTaskRunsTable.userId, user.id))
+      .orderBy(desc(agentTaskRunsTable.createdAt))
       .limit(50);
     const filtered = matterId ? rows.filter((r: any) => r.matterId === matterId) : rows;
     return res.json({ success: true, runs: filtered });
@@ -52,8 +52,9 @@ agentRunsRouter.get("/agent-runs", async (req: AuthenticatedRequest, res: Respon
   }
 });
 
-// POST /agent-runs — run an agent through the Python layer and persist the run
-agentRunsRouter.post("/agent-runs", async (req: AuthenticatedRequest, res: Response) => {
+// POST /agent-
+runs — run an agent through the Python layer and persist the run
+agentRunsRouter.post("/agent-task-runs", async (req: AuthenticatedRequest, res: Response) => {
   try {
     const user = req.user;
     if (!user?.id) return res.status(401).json({ success: false, error: "Unauthorized" });
@@ -64,7 +65,7 @@ agentRunsRouter.post("/agent-runs", async (req: AuthenticatedRequest, res: Respo
     }
 
     const inserted = await db
-      .insert(agentRunsTable)
+      .insert(agentTaskRunsTable)
       .values({
         userId: user.id,
         matterId: matterId ?? null,
@@ -87,7 +88,7 @@ agentRunsRouter.post("/agent-runs", async (req: AuthenticatedRequest, res: Respo
     if (layerResult) {
       const inner = layerResult?.result ?? layerResult;
       const updated = await db
-        .update(agentRunsTable)
+        .update(agentTaskRunsTable)
         .set({
           status: layerResult?.status === "success" ? "success" : "error",
           result: layerResult,
@@ -99,22 +100,23 @@ agentRunsRouter.post("/agent-runs", async (req: AuthenticatedRequest, res: Respo
           error: layerResult?.error ?? null,
           updatedAt: new Date(),
         })
-        .where(eq(agentRunsTable.id, run.id))
+        .where(eq(agentTaskRunsTable.id, run.id))
         .returning();
       return res.json({ success: true, run: updated?.[0] ?? run });
     }
 
     const failed = await db
-      .update(agentRunsTable)
+      .update(agentTaskRunsTable)
       .set({
         status: "error",
         error: "Agent layer unreachable at " + AGENT_LAYER_URL,
         latencyMs,
         updatedAt: new Date(),
       })
-      .where(eq(agentRunsTable.id, run.id))
+      .where(eq(agentTaskRunsTable.id, run.id))
       .returning();
-    return res.status(502).json({ success: false, error: "Agent layer unreachable", run: failed?.[0] ?? run });
+    return res.status(502).json({ success
+: false, error: "Agent layer unreachable", run: failed?.[0] ?? run });
   } catch (err: any) {
     return res.status(500).json({ success: false, error: err?.message ?? "Agent run failed" });
   }
