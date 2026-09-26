@@ -11,7 +11,6 @@ const SOURCE = path.join(
 const OUT_DIR = path.join(webRoot, "src", "components", "stitch", "pages");
 const REGISTRY = path.join(webRoot, "src", "components", "stitch", "registry.ts");
 const TOKENS = path.join(webRoot, "src", "components", "stitch", "tokens.css");
-const INDEX_CSS = path.join(webRoot, "src", "index.css");
 
 const VOID_ELEMENTS = new Set([
   "area","base","br","col","embed","hr","img","input","link","meta",
@@ -125,31 +124,32 @@ function extractStyles(doc) {
 
 function parseTailwindConfig(doc) {
   const m = doc.match(/<script id="tailwind-config">([\s\S]*?)<\/script>/);
-  if (!m) return null;
+  if (!m) {
+    // Some designs use a plain <script> for tailwind.config
+    const m2 = doc.match(/<script>\s*tailwind\.config\s*=\s*\{([\s\S]*?)\}\s*<\/script>/);
+    if (!m2) return null;
+    try { return (new Function("return ({ " + m2[1] + " })"))(); } catch { return null; }
+  }
   let text = m[1].trim();
   const eq = text.indexOf("=");
   if (eq !== -1) text = text.slice(eq + 1).trim();
-  text = text.replace(/;\s*$/, "");
+  // Strip trailing commas and stray content before parsing (some designs have malformed trailing braces)
+  text = text.replace(/,(\s*[}\]])/g, "$1");
+  // Remove trailing junk: extra closing braces after the config object
+  text = text.replace(/\}\s*,?\s*\}\s*,?\s*\}\s*$/g, "}}");
   try {
     return (new Function("return (" + text + ")"))();
   } catch (e) {
-    console.warn("[stitch:convert] Could not parse tailwind config: " + e.message);
-    return null;
+    // Second chance: aggressive cleanup of trailing braces
+    try {
+      const cleaned = text.replace(/\}[\s\S]*$/, "}");
+      return (new Function("return (" + cleaned + ")"))();
+    } catch (e2) {
+      console.warn("[stitch:convert] Could not parse tailwind config: " + e2.message);
+      return null;
+    }
   }
 }
-
-// theme categories: [configKey, cssVarPrefix, placeholderValue]
-const CATS = [
-  ["colors", "--color-", "#000000"],
-  ["fontFamily", "--font-", "sans-serif"],
-  ["fontSize", "--text-", "1rem"],
-  ["fontWeight", "--font-weight-", "400"],
-  ["borderRadius", "--radius-", "0.5rem"],
-  ["lineHeight", "--leading-", "1.5"],
-  ["boxShadow", "--shadow-", "0 0 #0000"],
-  ["opacity", "--opacity-", "1"],
-  ["zIndex", "--z-", "1"],
-];
 
 function themeOf(cfg) {
   if (!cfg || !cfg.theme) return {};
@@ -157,48 +157,72 @@ function themeOf(cfg) {
   return t.extend ? Object.assign({}, t, t.extend) : t;
 }
 
-function normalizeValue(cat, value) {
-  if (value === undefined || value === null) return null;
-  if (Array.isArray(value)) {
-    if (cat === "fontFamily") return value.join(", ");
-    return String(value[0]);
+// ---- Token flattening (v3) ----
+// Handles: nested color objects (lemon: {300,400}), fontSize arrays with
+// typography modifiers, fontFamily arrays, DEFAULT keys.
+
+const FONT_SIZE_MODS = {
+  lineHeight: "--line-height",
+  fontWeight: "--font-weight",
+  letterSpacing: "--letter-spacing",
+};
+
+// Returns array of { name, cssVar, value, mods? }
+function flattenTokens(catKey, prefix, entries) {
+  const out = [];
+  if (!entries || typeof entries !== "object") return out;
+  for (const [name, val] of Object.entries(entries)) {
+    if (val === undefined || val === null) continue;
+    if (val && typeof val === "object" && !Array.isArray(val)) {
+      // Nested object (e.g. colors: lemon: { 300: '#fef08a' })
+      for (const [sub, sv] of Object.entries(val)) {
+        if (sv === undefined || sv === null || typeof sv === "object") continue;
+        const subName = sub === "DEFAULT" ? name : name + "-" + sub;
+        out.push({ name: subName, cssVar: prefix + subName, value: String(sv).trim() });
+      }
+      continue;
+    }
+    if (Array.isArray(val)) {
+      if (catKey === "fontSize") {
+        const mods = (val[1] && typeof val[1] === "object") ? val[1] : {};
+        const cleanMods = {};
+        for (const [k, v] of Object.entries(mods)) {
+          if (FONT_SIZE_MODS[k]) cleanMods[k] = String(v);
+        }
+        out.push({ name, cssVar: prefix + name, value: String(val[0]).trim(), mods: cleanMods });
+      } else if (catKey === "fontFamily") {
+        out.push({ name, cssVar: prefix + name, value: val.join(", ").trim() });
+      } else {
+        out.push({ name, cssVar: prefix + name, value: String(val[0]).trim() });
+      }
+      continue;
+    }
+    out.push({ name, cssVar: prefix + name, value: String(val).trim() });
   }
-  if (typeof value === "object") return null; // nested objects unsupported
-  return String(value);
+  return out;
 }
 
-function hexToHsl(hex) {
-  const m = hex.trim().match(/^#?([0-9a-f]{6})$/i);
-  if (!m) return null;
-  const int = parseInt(m[1], 16);
-  const r = ((int >> 16) & 255) / 255;
-  const g = ((int >> 8) & 255) / 255;
-  const b = (int & 255) / 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0;
-  const l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0));
-    else if (max === g) h = ((b - r) / d + 2);
-    else h = ((r - g) / d + 4);
-    h *= 60;
-  }
-  return Math.round(h) + " " + Math.round(s * 100) + "% " + Math.round(l * 100) + "%";
-}
+const CATS = [
+  ["colors", "--color-", "#000000", true],
+  ["spacing", "--spacing-", "1rem", true],
+  ["fontFamily", "--font-", "sans-serif", true],
+  ["fontSize", "--text-", "1rem", true],
+  ["fontWeight", "--font-weight-", "400", true],
+  ["borderRadius", "--radius-", "0.5rem", true],
+  ["lineHeight", "--leading-", "1.5", true],
+  ["boxShadow", "--shadow-", "0 0 #0000", true],
+  ["opacity", "--opacity-", "1", true],
+  ["zIndex", "--z-", "1", true],
+];
 
-// Token names already registered by src/index.css (@theme inline). For these,
-// utilities reference hsl(var(--name)), so we override the inner var per page.
-function existingIndexTokens() {
-  const set = new Set();
-  try {
-    const css = fs.readFileSync(INDEX_CSS, "utf-8");
-    const re = /--color-([a-z0-9-]+)\s*:/g;
-    let m;
-    while ((m = re.exec(css))) set.add(m[1]);
-  } catch (e) { /* index.css not found; skip */ }
-  return set;
+function themeTokens(theme) {
+  // Returns Map key -> flattened token list, where key = catKey + "/" + name
+  const all = new Map();
+  for (const [catKey, prefix] of CATS) {
+    const flat = flattenTokens(catKey, prefix, theme[catKey]);
+    for (const t of flat) all.set(catKey + "/" + t.name, t);
+  }
+  return all;
 }
 
 function main() {
@@ -207,7 +231,6 @@ function main() {
     process.exit(1);
   }
 
-  const indexTokens = existingIndexTokens();
   fs.rmSync(OUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
@@ -227,44 +250,46 @@ function main() {
     parsed.push({
       folder,
       doc,
-      theme: themeOf(parseTailwindConfig(doc)),
+      tokens: themeTokens(themeOf(parseTailwindConfig(doc))),
       bodyClasses: extractBodyClasses(doc),
     });
   }
 
-  // Pass 2: union of all token names per category (excluding index.css tokens)
-  const union = new Map(); // cat -> Set(names)
-  for (const cat of CATS) union.set(cat[0], new Set());
+  // Pass 2: union of all flattened tokens across pages (for global @theme)
+  const union = new Map(); // key -> { cssVar, placeholder }
   for (const p of parsed) {
-    for (const [catKey] of CATS) {
-      const entries = p.theme[catKey];
-      if (!entries || typeof entries !== "object") continue;
-      for (const name of Object.keys(entries)) {
-        if (name === "DEFAULT") continue;
-        if (catKey === "colors" && indexTokens.has(name)) continue;
-        union.get(catKey).add(name);
+    for (const [key, t] of p.tokens) {
+      if (!union.has(key)) {
+        const catKey = key.split("/")[0];
+        const cat = CATS.find((c) => c[0] === catKey);
+        union.set(key, { cssVar: t.cssVar, placeholder: cat[2] });
       }
     }
   }
 
-  // Pass 3: emit global tokens.css (placeholders; real values are page-scoped)
+  // Pass 3: emit global tokens.css (placeholders; pages override with real values)
   const themeLines = [];
-  for (const [catKey, prefix, placeholder] of CATS) {
-    for (const name of Array.from(union.get(catKey)).sort()) {
-      themeLines.push("  " + prefix + name + ": " + placeholder + ";");
+  const modLines = [];
+  for (const [, u] of union) {
+    themeLines.push("  " + u.cssVar + ": " + u.placeholder + ";");
+    if (u.cssVar.startsWith("--text-")) {
+      modLines.push("  " + u.cssVar + "--line-height: 1.5;");
+      modLines.push("  " + u.cssVar + "--font-weight: 400;");
+      modLines.push("  " + u.cssVar + "--letter-spacing: 0em;");
     }
   }
   const tokensCss = [
     "/* AUTO-GENERATED by scripts/convert-stitch-to-react.mjs -- do not edit.",
-    "   Registers every Stitch design token with Tailwind v4. Utilities compile to",
-    "   var(--color-*) etc., so each page scopes its own real values via [data-page].",
-    "   Tokens already defined in src/index.css (@theme inline) are NOT redefined here;",
-    "   those are overridden per page through their hsl(var(--*)) inner variables. */",
+    "   Registers every Stitch design token with Tailwind v4 (flattened, incl.",
+    "   nested palettes like lemon-400, custom spacing like gutter/margin-safe,",
+    "   and fontSize typography modifiers). Utilities compile to var(--color-*),",
+    "   var(--spacing-*) etc.; each page scopes its own real values via [data-page]. */",
     "@theme {",
     ...themeLines,
+    ...modLines,
     "}",
     "",
-    "/* Material Symbols support (designs load the font via Google Fonts in layout.tsx) */",
+    "/* Material Symbols support (font loaded via Google Fonts in layout.tsx) */",
     ".material-symbols-outlined {",
     '  font-family: "Material Symbols Outlined";',
     "  font-weight: normal;",
@@ -285,30 +310,20 @@ function main() {
   const registry = new Map();
   let converted = 0;
   for (const p of parsed) {
-    const { folder, doc, theme, bodyClasses } = p;
+    const { folder, doc, tokens, bodyClasses } = p;
     const css = extractStyles(doc);
     const jsx = htmlToJsx(extractBody(doc));
     const componentName = pascal(folder);
     const safeFile = folder.replace(/[^a-zA-Z0-9._-]/g, "_");
     const cssFile = safeFile + ".css";
 
-    // Page-scoped CSS variables with the page's real token values.
+    // Page-scoped CSS variables with the page's real token values
     const varLines = [];
-    for (const [catKey, prefix] of CATS) {
-      const entries = theme[catKey];
-      if (!entries || typeof entries !== "object") continue;
-      for (const name of Object.keys(entries)) {
-        if (name === "DEFAULT") continue;
-        const value = normalizeValue(catKey, entries[name]);
-        if (!value) continue;
-        if (catKey === "colors" && indexTokens.has(name)) {
-          // index.css token: override the inner hsl variable so existing
-          // @theme inline utilities pick up this page's value.
-          const hsl = hexToHsl(value);
-          if (hsl) varLines.push("  --" + name + ": " + hsl + ";");
-          varLines.push("  " + prefix + name + ": " + value + ";");
-        } else {
-          varLines.push("  " + prefix + name + ": " + value + ";");
+    for (const [, t] of tokens) {
+      varLines.push("  " + t.cssVar + ": " + t.value + ";");
+      if (t.mods) {
+        for (const [k, v] of Object.entries(t.mods)) {
+          varLines.push("  " + t.cssVar + FONT_SIZE_MODS[k] + ": " + v + ";");
         }
       }
     }
@@ -368,9 +383,8 @@ function main() {
   ].join("\n");
   fs.writeFileSync(REGISTRY, registrySrc);
 
-  const tokenCount = themeLines.length;
   console.log("[stitch:convert] Converted " + converted + " pages into React components.");
-  console.log("[stitch:convert] Registered " + tokenCount + " global design tokens (+" + indexTokens.size + " reused from index.css).");
+  console.log("[stitch:convert] Registered " + themeLines.length + " global design tokens.");
   if (skipped.length) {
     console.log("[stitch:convert] Skipped " + skipped.length + ":");
     for (const s of skipped) console.log("  - " + s);
