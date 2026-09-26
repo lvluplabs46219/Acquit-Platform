@@ -2,7 +2,15 @@ import React, { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight, MapPin, Award, ExternalLink } from "lucide-react";
-import type { LawyerListing } from "./AttorneyDirectory";
+export type LawyerListing = {
+  id: string | number;
+  name: string;
+  firmName: string;
+  listingTier: string;
+  practiceAreas: string[];
+  counties: string[];
+  states: string[];
+};
 
 interface Props {
   lawyers: LawyerListing[];
@@ -40,7 +48,8 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
         <div className="flex space-x-4 pb-4">
           {featured.map((lawyer, index) => (
             <div key={lawyer.id} className="flex-[0_0_100%] sm:flex-[0_0_50%] md:flex-[0_0_33.333%] min-w-0" aria-roledescription="slide">
-              <div className="sr-only">Slide {index + 1} of {featured.length}</div>
+     
+         <div className="sr-only">Slide {index + 1} of {featured.length}</div>
               <div className="h-full rounded-2xl border border-[#D4AF37]/30 bg-gradient-to-b from-[#D4AF37]/10 to-transparent p-5 transition hover:-translate-y-1 hover:shadow-lg hover:shadow-[#D4AF37]/5 flex flex-col group">
                 <div className="flex justify-between items-start mb-4">
                   <div className="h-12 w-12 rounded-full bg-black/40 border border-[#D4AF37]/30 flex items-center justify-center overflow-hidden shrink-0">
@@ -69,7 +78,8 @@ export function FeaturedAttorneysCarousel({ lawyers = [] }: Props) {
                   )}
                 </div>
                 
-                <div className="flex items-center gap-1.5 text-[10px] text-white/50 mt-2">
+                <div className=
+"flex items-center gap-1.5 text-[10px] text-white/50 mt-2">
                   <MapPin size={12} />
                   <span>{lawyer.counties[0]} • {lawyer.states[0]}</span>
                 </div>

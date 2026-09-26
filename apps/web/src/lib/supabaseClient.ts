@@ -10,6 +10,16 @@
 
 import { createClient, SupabaseClient, User, Session, RealtimeChannel } from "@supabase/supabase-js";
 
+declare global {
+  interface ImportMetaEnv {
+    readonly VITE_SUPABASE_URL?: string;
+    readonly VITE_SUPABASE_ANON_KEY?: string;
+  }
+  interface ImportMeta {
+    readonly env?: ImportMetaEnv;
+  }
+}
+
 // Canonical Public Supabase Config (Environment Variables or Local Fallback)
 const SUPABASE_URL = 
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
@@ -44,7 +54,8 @@ export function getSupabaseClient(): SupabaseClient {
       },
     });
 
-    // Make available on window for custom client scripts
+    // Make available on wind
+ow for custom client scripts
     if (typeof window !== "undefined") {
       (window as any).acquitSupabase = browserSupabaseInstance;
     }
@@ -128,7 +139,8 @@ export const clientCaseData = {
   /**
    * Fetch active matters for currently authenticated litigant
    */
-  async fetchUserMatters(userId?: string) {
+  async fet
+chUserMatters(userId?: string) {
     const client = getSupabaseClient();
     let query = client.from("matters").select("*").order("created_at", { ascending: false });
     if (userId) {
@@ -198,7 +210,8 @@ export const clientCaseData = {
           event: "*",
           schema: "public",
           table: "matters",
-          filter: `id=eq.${matterId}`,
+ 
+         filter: `id=eq.${matterId}`,
         },
         (payload) => {
           console.log("[Supabase Realtime] Matter change received:", payload);
